@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000" ,allowedHeaders = "*")
@@ -70,6 +71,14 @@ public class UserController {
     public Boolean checkIsPokemonLiked(@PathVariable("pokemonId") Long pokemonId, Principal principal){
         Long userId = userS.getUser(principal.getName()).getUserId();
         return userS.checkPokemonInDB(pokemonId,userId);
+    }
+
+    @GetMapping("/getAllPokemons")
+    public List<Long> getAll(Principal principal){
+        Long userId = userS.getUser(principal.getName()).getUserId();
+        System.out.println(userS.getAllPokemons(userId));
+
+        return userS.getAllPokemons(userId);
     }
 }
 
