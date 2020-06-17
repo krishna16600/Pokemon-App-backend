@@ -14,7 +14,6 @@ public class User {
     private String email;
     private String password;
     private String mobileNo;
-    private String gender;
     private Boolean active = true;
     private String role = "user";
 
@@ -56,14 +55,6 @@ public class User {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public Boolean getActive() {

@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.Model.AuthUser;
 import com.example.demo.Model.Favourite;
 import com.example.demo.Model.User;
 import com.example.demo.Repository.FavouriteRepository;
@@ -20,22 +21,27 @@ public class UserService {
     private FavouriteRepository favRepo;
 
 
-    public User addUserToDB(User user){
+    public String addUserToDB(User user){
         List<User> allUsers = userRepo.findAll();
         for(User u: allUsers){
             if(u.getEmail().equals(user.getEmail()))
-                return null;
+                return "\"User Already Exists\"";
         }
         userRepo.save(user);
-        return user;
+        return "\"Registered\"";
     }
 
     public User getUser(String email){
         return userRepo.findByEmail(email);
     }
 
+    public User checkUser(AuthUser user){
+       return userRepo.findByEmailAndPassword(user.getEmail(),user.getPassword());
+    }
+
     public String savePokemon(Long pokemonId, Long userId){
-        if(favRepo.findByUserIdAndAndPokemonId(userId,pokemonId))
+        System.out.println(pokemonId + " " +userId);
+        if(favRepo.findByUserIdAndAndPokemonId(userId,pokemonId)!=null)
             return "\"Already Saved\"";
 
         Favourite fav = new Favourite();
@@ -52,4 +58,11 @@ public class UserService {
         return "\"Removed Pokemon\"";
     }
 
+    public Boolean checkPokemonInDB(Long pokemonId, Long userId){
+        if(favRepo.findByUserIdAndAndPokemonId(userId,pokemonId)!=null)
+            return true;
+
+        return false;
+
+    }
 }

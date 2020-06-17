@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FavouriteRepository extends JpaRepository<Favourite,Long> {
     String deleteFavouriteByUserIdAndPokemonId(Long userId, Long pokemonId);
-    Boolean findByUserIdAndAndPokemonId(Long userId, Long pokemonId);
+    Favourite findByUserIdAndAndPokemonId(Long userId, Long pokemonId);
 
 }

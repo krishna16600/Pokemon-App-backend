@@ -1,7 +1,7 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Model.Favourite;
 import com.example.demo.Model.User;
+import com.example.demo.Model.AuthUser;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.security.Principal;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000" ,allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class UserController {
 
     //adding user to Database
     @PostMapping("/addUser")
-    public User addUser(@RequestBody User user){
+    public String addUser(@RequestBody User user){
         return userS.addUserToDB(user);
     }
 
@@ -44,10 +45,17 @@ public class UserController {
         return "/home";
 
     }
+
+    @PostMapping("/authenticate")
+    public User checkUser(@RequestBody AuthUser user){
+        System.out.println(user.getEmail()+" "+user.getPassword());
+        return userS.checkUser(user);
+    }
     //adding fav pokemon to the user
     @GetMapping("/addPokemon/{pokemonId}")
     public String addFav(@PathVariable("pokemonId") Long pokemonId, Principal principal){
         Long userId = userS.getUser(principal.getName()).getUserId();
+        System.out.println("user id is" + userId + "Pokemon id is "+pokemonId);
        return  userS.savePokemon(pokemonId,userId);
     }
 
@@ -57,4 +65,12 @@ public class UserController {
     public String delete(@PathVariable("pokemonId") Long pokemonId, Principal principal){
         return userS.deletePokemon(pokemonId,principal);
     }
+
+    @GetMapping("/checkLiked/{pokemonId}")
+    public Boolean checkIsPokemonLiked(@PathVariable("pokemonId") Long pokemonId, Principal principal){
+        Long userId = userS.getUser(principal.getName()).getUserId();
+        return userS.checkPokemonInDB(pokemonId,userId);
+    }
 }
+
+
